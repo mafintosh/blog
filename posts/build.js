@@ -14,8 +14,8 @@ marked.setOptions({
 
 posts.forEach(function (post, i) {
   var source = marked(fs.readFileSync(path.join(__dirname, post.source), 'utf-8'))
-  var page = template.replace('{source}', source).replace('{date}', post.date).replace('{title}', post.title)
   var link = post.source.replace('.md', '.html')
+  var page = template.replace('{source}', source).replace('{permalink}', '<a href="/' + link + '">' + post.date + ', Mathias Buus</a>').replace('{title}', post.title)
 
   fs.writeFileSync(path.join(__dirname, '..', link), page)
   if (i === 0) fs.writeFileSync(path.join(__dirname, '../index.html'), page)
