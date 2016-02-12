@@ -1,0 +1,15 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "@mafintosh blogs about technology",
+  "main": "index.js",
+  "dependencies": {
+    "marked": "^0.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "node posts/build.js"
+  },
+  "author": "Mathias Buus (@mafintosh)",
+  "license": "MIT"
+}
