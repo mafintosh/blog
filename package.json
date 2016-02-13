@@ -4,7 +4,8 @@
   "description": "@mafintosh blogs about technology",
   "main": "index.js",
   "dependencies": {
-    "marked": "^0.3.5"
+    "marked": "^0.3.5",
+    "rss": "^1.2.1"
   },
   "devDependencies": {},
   "scripts": {
