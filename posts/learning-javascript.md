@@ -6,7 +6,7 @@ I didn't have anything to compare it to but I loved programming Java because it,
 
 I quickly pivoted to writing more advanced things. I took a "Introduction to Computer Networking" class where the professor showed how you could connect two different computers on a local network using a tcp server and client. It was crazy inspiring!
 
-Writing networked things in Java was a bit complicated. I would use a lot of abstractions (interfaces, abstract classes, big class hieracies) but things still didn't always work. Writing networked programs are hard and I had very little experience and made a lot of beginners mistakes. This was around 2007 and a friend showed me an article about this new thing that had just come out called Node.js
+Writing networked things in Java was a bit complicated. I would use a lot of abstractions (interfaces, abstract classes, big class hieracies) but things still didn't always work. Writing networked programs are hard and I had very little experience and made a lot of beginners mistakes. This was around 2009 and a friend showed me an article about this new thing that had just come out called Node.js
 
 I started playing around with Node and immediately started liking it since writing tcp servers were a lot simpler in Node than it was in Java. This was my first intro to Javascript as well - a language I knew very little about.
 
