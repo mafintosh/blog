@@ -1,5 +1,3 @@
-# Pragmatic modularity
-
 In my opinion the best feature in Node.js is the global `require` function.
 Why is `require` great? It is the function that allows you to load in external modules not provided by node core. Not only is this a good feature by itself, but the way `require` loads modules makes Node.js the most module friendly development platform out there today.
 
