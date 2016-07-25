@@ -156,7 +156,7 @@ doRequest('http://example.com', function (err, responseStream) {
 
 Now our module works for a lot more use cases! I wrote a module that will gunzip a stream if gzipped. It's called [gunzip-maybe](https://github.com/mafintosh/gunzip-maybe)
 
-## Epilouge
+## Epilogue
 
 Don't think of the above sections as absolute rules to what constitutes a good module. These are just patterns I've noticed when writing my own. The easiest way to validate them is to start writing modules yourself. When publishing a new module you don't always know if it'll end up being good or bad. Most of the time you'll figure that out while using the module in different use cases. Don't look too much at github stars, or when the last commit was made. A small scoped module might not need updates because it is mostly done.
 
