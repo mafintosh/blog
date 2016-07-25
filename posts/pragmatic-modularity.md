@@ -30,7 +30,7 @@ As an added bonus `foo.js` can still require `bar.js` by doing `require('./a-fol
 The require function is also a great example of decoupling in practice (we'll get back to this later). It was added to node before `npm`, the node package manager, was created.
 This meant that external developers could create third party package managers that all could install multiple versions of the same module without node needing to know that this was happening. Node was just reading files from a file system. There was a time we had multiple package managers in node all competing to be "The One True Package Manager".
 
-With npm came an explosion in the amount of packages available for node. Almost 300.000 different packages can now be downloaded through npm.
+With npm came an explosion in the amount of packages available for node. Over 300.000 different packages can now be downloaded through npm.
 
 ## Writing Great Modules
 
@@ -44,13 +44,13 @@ If you have a hard time explaining what your module does when writing the README
 
 ### Lower level is better than higher level
 
-When designing an API for a new module you want to make you have to make a lot of decisions. You have to put yourself in the place of the users of the module and think about the different ways they'll wanna use your code. When your users have different use cases this means you'll have to make trade-offs in your API. This can be surprisingly tricky and I often see friends getting stuck trying to publish their new modules because of this.
+When designing an API for a new module you have to make a lot of decisions. You have to put yourself in the place of the users of the module and think about the different ways they'll wanna use your code. When your users have different use cases this means you'll have to make trade-offs in your API. This can be surprisingly tricky and I often see friends getting stuck trying to publish their new modules because of this.
 
 The solution to this problem is to make your API more low level, meaning that you'll expose less abstractions and require users to call more functions to solve their use cases. In return your API will be more stable and much less likely to change dramatically over time.
 
 An example of this pattern could be a module I wrote a while ago called [multicast-dns](https://github.com/mafintosh/multicast-dns). I started out wanting to make a 100% Javascript implementation of a service discovery protocol used by Bonjour/ZeroConf (the protocol your computer uses to find your printer). All the existing implementations (that binded to native code) used a lot of abstractions in their APIs, such as a ServiceBrowser that would emit events every time a new service would be discovered on the network. The high level APIs required a lot of state management and retry configuration and was in general hard to implement. The solution for me was to rethink the problem and come up with the minimal abstraction possible to solve the core of the problem.
 
-The final API ended up consisting of 2 low level methods and 2 low level events. One pair for sending/receiving a query looking for a service and another pair for answering a query (using the standard protocol underneith). Each method's arguments map very closely to what is being send over the wire and the module has very little state. Higher level things like retries are left up to the user of the module.
+The final API ended up consisting of 2 low level methods and 2 low level events. One pair for sending/receiving a query looking for a service and another pair for answering a query (using the standard protocol underneath). Each method's arguments map very closely to what is being send over the wire and the module has very little state. Higher level things like retries are left up to the user of the module.
 
 ``` js
 var mdns = require('multicast-dns')()
@@ -96,7 +96,7 @@ Whats the problem with this module? The problem is that since we are accepting a
 
 We are also coupling express which makes our module less useful for a bunch of other use cases. What if a user wanted to use the plain http module? or hapi or some other web framework?
 
-What would be a better solution? Usually a peer dependency is a sign that your module is doing too much or coupling too many things. A fix usually evolves around rethinking the purpose of the module without the peer depencency and make the module do less things. For example we could change our module to simply expose a function returns a favicon.
+What would be a better solution? Usually a peer dependency is a sign that your module is doing too much or coupling too many things. A fix usually evolves around rethinking the purpose of the module without the peer depencency and make the module do less things. For example we could change our module to simply expose a function that returns a favicon.
 
 ``` js
 module.exports = awesomeFavicon
@@ -108,7 +108,7 @@ function awesomeFavicon (req, res) {
 }
 ```
 
-In this version the module does not have any peer dependencies except for a http request and response which comes from node core. In general peer dependencies from node core are more acceptable since they change less often (streams being a big exception here!)
+In this version the module does not have any peer dependencies except for an http request and response which comes from node core. In general peer dependencies from node core are more acceptable since they change less often (streams being a big exception here!)
 
 You cannot always avoid peer dependencies but you should try to keep them at an absolut minimum and treat them as very expensive, modularity wise.
 
@@ -133,7 +133,7 @@ The disadvantage is a bit more code in your parent module. The advantage is a hi
 
 I/O stands for Input/Output and is a general term we use when a program is writing to disk, reading from the network or similar. I/O is hard to get right and introduces a hard coupling to your modules. Luckily functions that do I/O in node are easy to identify since node does async I/O. If a function takes a callback or returns a promise it is most likely doing some sort of I/O.
 
-Why is I/O bad? Well it isn't really, except it will couple your module to a specific way of doing things. Here is an example. Let's say we wanted a module that gunzipped a http request. It might look something like this
+Why is I/O bad? Well it isn't really, except it will couple your module to a specific way of doing things. Here is an example. Let's say we wanted a module that gunzipped an http request. It might look something like this
 
 ``` js
 var gunzipRequest = require('gunzip-request')
