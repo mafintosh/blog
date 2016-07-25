@@ -17,7 +17,7 @@ What node will do is look for `request` in the following folders.
   3. `/foo/node_modules/request`
   4. `/node_modules/request`
 
-The first folder that contains request in the one node will return. Why is this important? It allows us to use multiple versions of request very trivially. We can simply nest them inside multiple node_modules folders. Here is an example. Let's say my program has two files `foo.js` and `bar.js` that both wanna require request but different versions of it. We can easily do this now by structuring our program like this
+The first folder that contains request in the one node will return. Why is this important? It allows us to use multiple versions of request trivially. We can simply nest them inside multiple node_modules folders. Here is an example. Let's say my program has two files `foo.js` and `bar.js` that both wanna require request but different versions of it. We can easily do this now by structuring our program like this
 
 ```
 ./foo.js
@@ -40,19 +40,19 @@ So Node.js is great for requiring modules and npm is great is distributing them.
 
 ### Keep it simple
 
-This one you probably knew already. Try to keep things as simple as possible. Don't introduce new abstractions unless you really have to. Good modules usually just export a single function that does one thing and one thing only.
+This one you probably knew already. Try to keep things as simple as possible. Don't introduce new abstractions unless you really have to. Good modules just export a single function that does one thing and one thing only.
 
-If you have a hard time explaining what your module does when writing the README its probably too complicated and should be split into more modules.
+If you have a hard time explaining what your module does when writing the README it's probably too complicated and should be split into more modules.
 
 ### Lower level is better than higher level
 
-When designing an API for a new module you want to make you have to make a lot of decisions. You have to put yourself in the place of the users of the module and think about the different ways they'll wanna use your code. When your users have different use cases this means you'll have to make trade-offs in your API. This can be surprisingly tricky and I often see this as a blocker when people get stuck trying to publish their new modules.
+When designing an API for a new module you want to make you have to make a lot of decisions. You have to put yourself in the place of the users of the module and think about the different ways they'll wanna use your code. When your users have different use cases this means you'll have to make trade-offs in your API. This can be surprisingly tricky and I often see friends getting stuck trying to publish their new modules because of this.
 
-The solution to this problem is to make your API more low level, meaning that you'll expose less abstractions and problably require users to call more functions to solve their use cases. In return your API will be more stable and much less likely to change dramatically over time.
+The solution to this problem is to make your API more low level, meaning that you'll expose less abstractions and require users to call more functions to solve their use cases. In return your API will be more stable and much less likely to change dramatically over time.
 
-An example of this pattern could be a module I wrote a while ago called [multicast-dns](https://github.com/mafintosh/multicast-dns). I started out wanting to make a 100% Javascript implementation of service discovery protocol used my Bonjour/zeroconf (the protocol your computer uses to find your printer). All the existing implementations (that binded to native code) used a lot of abstractions in their APIs, such as a ServiceBrowser that would emit events every time a new service would be discovered on the network. The high level APIs required a lot of state management and retry configuration and was in general hard to implement. The solution for me was to rethink the problem is come up with the minimal abstraction possible to solve the core of the problem.
+An example of this pattern could be a module I wrote a while ago called [multicast-dns](https://github.com/mafintosh/multicast-dns). I started out wanting to make a 100% Javascript implementation of a service discovery protocol used by Bonjour/ZeroConf (the protocol your computer uses to find your printer). All the existing implementations (that binded to native code) used a lot of abstractions in their APIs, such as a ServiceBrowser that would emit events every time a new service would be discovered on the network. The high level APIs required a lot of state management and retry configuration and was in general hard to implement. The solution for me was to rethink the problem and come up with the minimal abstraction possible to solve the core of the problem.
 
-The final API ended up consisting of 2 low level methods and 2 low level events. One pair for sending/receiving a query looking for a service and another pair for answering to that query (using the standard protocol underneith). Each method's arguments maps very close to what is being send over the wire and the module has very little state. High level things like retries are left up to the user of the module.
+The final API ended up consisting of 2 low level methods and 2 low level events. One pair for sending/receiving a query looking for a service and another pair for answering a query (using the standard protocol underneith). Each method's arguments map very closely to what is being send over the wire and the module has very little state. Higher level things like retries are left up to the user of the module.
 
 ``` js
 var mdns = require('multicast-dns')()
@@ -74,14 +74,14 @@ mdns.query({
 })
 ```
 
-The result was a light weight (~100 LoC) and easy to explain module that has a very stable interface.
+The result was a lightweight (~100 LoC) and easy to explain module that has a very stable interface.
 
-An added benefit is that you can always turn a low level module into a higher level one to make some common use cases simpler. My friend [@watson](https://github.com/watson) actually published a high level implementation of the Bonjour protocol called [bonjour](https://github.com/watson/bonjour) which uses my low level implemation to do the "heavy lifting".
+An added benefit is that you can always turn a lower level module into a higher level one to make some common use cases simpler. My friend [@watson](https://github.com/watson) actually published a high level implementation of the Bonjour protocol called [bonjour](https://github.com/watson/bonjour) which uses my low level implementation to do the "heavy lifting".
 
 ### Avoid peer dependencies
 
 What is a peer dependency? A peer dependency is when you have a function in your program that accepts an instance of some external prototype.
-For example, if you write a module that does send back a cool favicon when a user requests `/favicon.ico` you might be tempted to make a function that accepts an expressjs instance (express is a popular node.js web framework), attaches a route handler and returns the cool favicon.
+For example, if you write a module that sends back a cool favicon when a user requests `/favicon.ico` you might be tempted to make a function that accepts an expressjs instance (express is a popular node.js web framework), attaches a route handler and returns the favicon.
 
 ``` js
 module.exports = awesomeFavicon
@@ -94,11 +94,11 @@ function awesomeFavicon (app) {
 }
 ```
 
-Whats the problem with this module? The problem is that since we are accepting an instance of external object we can no longer control the version of express this instance uses. What if express were to break the `.get` interface in a later version of release a new major bump? We don't have any way of enforcing that which quickly turns maintaining this module into dependency hell.
+Whats the problem with this module? The problem is that since we are accepting an instance of external object we can no longer control the version of express this instance uses. What if express were to break the `.get` interface in a later version and release a new major bump? We don't have any way of enforcing that which quickly turns maintaining this module into dependency hell.
 
-We are also coupling express which our module less useful for a bunch of other usecases. What if a user wanted to simply use the plain http module? or hapi or some other web framework?
+We are also coupling express which makes our module less useful for a bunch of other use cases. What if a user wanted to use the plain http module? or hapi or some other web framework?
 
-What would be a better solution? Usually a peer dependency is a sign that your module is doing too much or coupling too many things. A fix usually evolves around rethinking the purpose of the module with the peer depencency and make the module do less things. For example we could change our module to simply expose a function returns a favicon.
+What would be a better solution? Usually a peer dependency is a sign that your module is doing too much or coupling too many things. A fix usually evolves around rethinking the purpose of the module without the peer depencency and make the module do less things. For example we could change our module to simply expose a function returns a favicon.
 
 ``` js
 module.exports = awesomeFavicon
@@ -112,11 +112,11 @@ function awesomeFavicon (req, res) {
 
 In this version the module does not have any peer dependencies except for a http request and response which comes from node core. In general peer dependencies from node core are more acceptable since they change less often (streams being a big exception here!)
 
-You cannot always avoid peer dependencies but you should try to keep them at an absolut minimum and treat them as very expensive modularity wise.
+You cannot always avoid peer dependencies but you should try to keep them at an absolut minimum and treat them as very expensive, modularity wise.
 
 ### Straight forward naming
 
-Choosing a good name for your module is always important. A good sign that your module has a clear and one-purpose scope is that you can pick a self-explainatory name consisting of 2-3 words. It can be tempting to come up with funny or "marketing" sounding names but usually that just makes it harder for users to figure out what your module does.
+Choosing a good name for your module is always important. A good sign that your module has a clear one-purpose scope is that you can pick a self-explainatory name consisting of 2-3 words. It can be tempting to come up with funny or "marketing" sounding names but usually that just makes it harder for users to figure out what your module does.
 
 Some examples of great names for small modules are
 
@@ -124,15 +124,18 @@ Some examples of great names for small modules are
 * [drag-and-drop-files](https://github.com/mikolalysenko/drag-and-drop-files) - a function that turns a div into a drop area
 * [insert-css](https://github.com/substack/insert-css) - inserts css into the head tag of an html page
 
-Once in a while you'll end up writing a module that has a bit broader scope than can be expressed in a the module name. I recent module I wrote that fits this pattern is called [hyperdrive](https://github.com/mafintosh/hyperdrive). Even though you make a bigger module you still want to keep the code base as lean as possible by factoring out various parts of the code base into independent modules.
+Once in a while you'll end up writing a module that has a bit broader scope than can be expressed in a the module name. Recently I wrote a module that fits this pattern. The module is called [hyperdrive](https://github.com/mafintosh/hyperdrive). Even though you make a bigger module you still want to keep the code base as lean as possible by factoring out various parts of the code base into independent modules.
 
-An anti-pattern to avoid when doing this is prefixing your dependency names with the parent module name. For example, hyperdrive relies on merkle trees internally and I wanted to factor out the generation of these into a separate module. The easiest way of doing that would have been to call it hyperdrive-merkle-tree-stream and have it generate a merkle tree specific for what hyperdrive needed. However, by doing this, we introduce a coupling to hyperdrive and are making our new indedepent module much less usable for other projects. Instead the new module was simply called [merkle-tree-stream](https://github.com/mafintosh/merkle-tree-stream) and has no coupling what so ever to hyperdrive. When hyperdrive uses it, it passes in some configuration that makes it generate the merkle trees it needs. The disadvantage is a bit more code in your parent module. The advantage is a highly decoupled module that will be much more stable over time and more usable for other developers.
+An anti-pattern to avoid when doing this is prefixing your dependency names with the parent module name. For example, hyperdrive relies on merkle trees internally and I wanted to factor out the generation of these into a separate module.
+The easiest way of doing that would have been to create a new module and call it hyperdrive-merkle-tree-stream and have it generate a merkle tree specificly for what hyperdrive needed. However, by doing this, we introduce a coupling to hyperdrive and are making our new indedepent module much less usable for other projects. Instead the new module was simply called [merkle-tree-stream](https://github.com/mafintosh/merkle-tree-stream) and has no coupling what so ever to hyperdrive. When hyperdrive uses it, it passes in some configuration that makes it generate the merkle trees it needs.
+
+The disadvantage is a bit more code in your parent module. The advantage is a highly decoupled module that will be much more stable over time and more usable for other developers.
 
 ### Beware of I/O
 
-I/O stands for Input/Output and is general term we use when a program is writing to disk, reading from the network or similar. I/O is hard to get right and introduces a hard coupling to your modules. Luckily functions that do I/O in node are easy to identify since node does async I/O. If a function takes a callback or returns a promise it is most likely doing some sort of I/O.
+I/O stands for Input/Output and is a general term we use when a program is writing to disk, reading from the network or similar. I/O is hard to get right and introduces a hard coupling to your modules. Luckily functions that do I/O in node are easy to identify since node does async I/O. If a function takes a callback or returns a promise it is most likely doing some sort of I/O.
 
-Why is I/O bad? Well it isn't really, except it will couple your module to a specific way of doing things. Here is an example. Lets say we wanted a module that gunzipped a http request. It might look something like this
+Why is I/O bad? Well it isn't really, except it will couple your module to a specific way of doing things. Here is an example. Let's say we wanted a module that gunzipped a http request. It might look something like this
 
 ``` js
 var gunzipRequest = require('gunzip-request')
@@ -142,7 +145,7 @@ gunzipRequest('http://example.com', function (err, res) {
 })
 ```
 
-What if I want to use gunzip something that isn't available over http? Then I cannot use this module since it couples http. It is easy to fix though. We can use streams to decouple I/O from the module
+What if I want to gunzip something that isn't available over http? Then I cannot use this module since it couples http. It is easy to fix though. We can use streams to decouple I/O from the module
 
 ``` js
 var gunzipStream = require('gunzip-stream')
@@ -153,11 +156,11 @@ doRequest('http://example.com', function (err, responseStream) {
 })
 ```
 
-Now our module works for a lot more usecases! I wrote a module that will gunzip a stream if gzipped. It's called [gunzip-maybe](https://github.com/mafintosh/gunzip-maybe)
+Now our module works for a lot more use cases! I wrote a module that will gunzip a stream if gzipped. It's called [gunzip-maybe](https://github.com/mafintosh/gunzip-maybe)
 
 ## Epilouge
 
-Don't think of the above sections as absolute rules to what constitutes a good module. These are just patterns I've noticed when writing my own. The easiest way to validate them is to start writing modules yourself. When publishing a new module you don't always know if it'll end up being good or bad. Most of the time you'll figure that out while using the module in different usecases. Don't look too much at github stars, or when the last commit was made. A small scoped module might not need updates because it is mostly done.
+Don't think of the above sections as absolute rules to what constitutes a good module. These are just patterns I've noticed when writing my own. The easiest way to validate them is to start writing modules yourself. When publishing a new module you don't always know if it'll end up being good or bad. Most of the time you'll figure that out while using the module in different use cases. Don't look too much at github stars, or when the last commit was made. A small scoped module might not need updates because it is mostly done.
 
 ## Related links
 
