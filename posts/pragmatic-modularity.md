@@ -162,5 +162,5 @@ Don't think of the above sections as absolute rules to what constitutes a good m
 
 ## Related links
 
-* https://opbeat.com/events/berlin-nodejs-community-meetup/#hypermodular-development - A talk i did about modules
+* https://opbeat.com/community/posts/hypermodular-development-by-mathias-buus/ - A talk i did about modules
 * http://substack.net/finding_modules - Great blog post from @substack about finding modules.
