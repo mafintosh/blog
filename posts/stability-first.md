@@ -8,7 +8,7 @@ I've been using Node since version 0.4. Recently Node 7 was released. When readi
 * It introduced a new core url module - a module that could easily have been published to npm instead.
 * It deprecated the Buffer constructor when not using `new`. A change that deprecated >1000 npm modules and their dependents.
 
-In addition there is now [a PR open to deprecate the Buffer constructor entirely](https://github.com/nodejs/node/pull/7152). A change that effects tens of thousands modules if not more.
+In addition there is now [a PR open to deprecate the Buffer constructor entirely](https://github.com/nodejs/node/pull/7152). A change that affects tens of thousands modules if not more.
 
 All these changes made me realize how much the priorities of Node has changed in the past years.
 
@@ -32,7 +32,7 @@ I recently installed and used https://github.com/maxogden/superlevel - a module 
 
 When Node core development stalled in 0.10, before the fork to io.js happened we learned some important lessons.
 
-1. Node core governence was broken and desperately needed community intervention.
+1. Node core governance was broken and desperately needed community intervention.
 2. Even with a stalled core project, Node innovation didn't stop. Module authors kept publishing new modules that moved the ecosystem forward.
 
 **Innovation shouldn't come from Node core**. It should come from modules. It should come from modules because they are easy to publish and they are extremely easy to update. We bump the major version when we want to make breaking changes and it doesn't break any old code as that'll just keep depending on the old version. Core doesn't have this luxury.
