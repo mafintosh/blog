@@ -22,10 +22,17 @@ marked.setOptions({
   }
 })
 
+var links = posts.map(function (post) {
+  var link = post.source.replace('.md', '.html')
+  return '<a href="' + link + '">' + post.title + '</a>'
+}).join('\n')
+
 posts.forEach(function (post, i) {
   var source = marked(fs.readFileSync(path.join(__dirname, post.source), 'utf-8'))
   var link = post.source.replace('.md', '.html')
   var page = template.replace('{source}', source).replace('{permalink}', '<a href="/' + link + '">' + post.date + ', Mathias Buus</a>').replace('{title}', post.title)
+
+  page = page.replace('{links}', links)
 
   fs.writeFileSync(path.join(__dirname, '..', link), page)
   if (i === 0) fs.writeFileSync(path.join(__dirname, '../index.html'), page)

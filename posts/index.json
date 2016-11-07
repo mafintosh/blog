@@ -1,4 +1,8 @@
 [{
+  "title": "Stability first",
+  "date": "December 2016",
+  "source": "stability-first.md"
+}, {
   "title": "Pragmatic Modularity",
   "date": "July 2016",
   "source": "pragmatic-modularity.md"
