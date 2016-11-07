@@ -126,6 +126,7 @@ Modules I maintain have been downloaded more than 750 million times. Lots of my 
 </ul>
 <p>In addition there is now <a href="https://github.com/nodejs/node/pull/7152">a PR open to deprecate the Buffer constructor entirely</a>. A change that affects tens of thousands modules if not more.</p>
 <p>All these changes made me realize how much the priorities of Node has changed in the past years.</p>
+<h2 id="why-does-node-work-">Why does Node work?</h2>
 <p>I love Node. It is a flexible platform that makes it easy to write a range of different programs. It is used for http servers, bittorrent clients, build tools, next generation p2p social networks, desktop apps and lots more!</p>
 <p>In my opinion, Node <em>works</em> because of two things:</p>
 <ol>
@@ -143,6 +144,7 @@ Core modules, unfortunately, do not have this feature. When you require a core m
 <li>Node core governance was broken and desperately needed community intervention.</li>
 <li>Even with a stalled core project, Node innovation didn&#39;t stop. Module authors kept publishing new modules that moved the ecosystem forward.</li>
 </ol>
+<h2 id="going-forward">Going forward</h2>
 <p><strong>Innovation shouldn&#39;t come from Node core</strong>. It should come from modules. It should come from modules because they are easy to publish and they are extremely easy to update. We bump the major version when we want to make breaking changes and it doesn&#39;t break any old code as that&#39;ll just keep depending on the old version. Core doesn&#39;t have this luxury.</p>
 <p><strong>Core&#39;s job is to be boring: never break, upgrade v8, and be fast.</strong></p>
 <p>Going forward I hope we make a few changes to the way core works.</p>

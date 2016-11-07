@@ -12,6 +12,8 @@ In addition there is now [a PR open to deprecate the Buffer constructor entirely
 
 All these changes made me realize how much the priorities of Node has changed in the past years.
 
+## Why does Node work?
+
 I love Node. It is a flexible platform that makes it easy to write a range of different programs. It is used for http servers, bittorrent clients, build tools, next generation p2p social networks, desktop apps and lots more!
 
 In my opinion, Node *works* because of two things:
@@ -34,6 +36,8 @@ When Node core development stalled in 0.10, before the fork to io.js happened we
 
 1. Node core governance was broken and desperately needed community intervention.
 2. Even with a stalled core project, Node innovation didn't stop. Module authors kept publishing new modules that moved the ecosystem forward.
+
+## Going forward
 
 **Innovation shouldn't come from Node core**. It should come from modules. It should come from modules because they are easy to publish and they are extremely easy to update. We bump the major version when we want to make breaking changes and it doesn't break any old code as that'll just keep depending on the old version. Core doesn't have this luxury.
 
